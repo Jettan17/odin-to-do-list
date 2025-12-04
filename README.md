@@ -1,1 +1,1 @@
-Webpack Template Repository for TOP, modifications to be made as new packages are used.
+To-Do-List Project from The Odin Project, I will be attempting to practice the SSOLID principles for better code maintainability and scalability, as well as learning to use new npm packages and using localStorage for persistence.
