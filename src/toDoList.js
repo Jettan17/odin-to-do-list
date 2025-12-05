@@ -1,30 +1,82 @@
-function createToDoItem (title, description, dueDate, priority) {
-    let doneStatus = false;
+function createItem ({title, 
+    description = "", 
+    dueDate, 
+    priority = "Medium",
+    doneStatus = false
+}) {
+    //Store data in private variable
+    let itemData = {
+        title,
+        description,
+        dueDate,
+        priority,
+        doneStatus
+    };
 
-    return { title, description, dueDate, priority, doneStatus };
-}
+    const readItem = () => ({ ...itemData });
 
-function createProject (title, description) {
-    let itemList = [];
-
-    const addItem = (title, description, dueDate, priority) => {
-        const newItem = createToDoItem(title, description, dueDate, priority);
-        itemList.push(newItem);
+    const updateItem = ({
+        title = itemData.title,
+        description = itemData.description,
+        dueDate = itemData.dueDate,
+        priority = itemData.priority,
+        doneStatus = itemData.doneStatus
+    }) => {
+        itemData = {
+            title,
+            description,
+            dueDate,
+            priority,
+            doneStatus
+        }
     }
 
-    return { title, description, itemList, addItem };
+    return { readItem, updateItem };
+}
+
+function createProject ({
+    title,
+    description = "",
+    itemList = []
+}) {
+    //Store data in private variable
+    let projectData = {
+        title,
+        description,
+        itemList
+    }
+
+    const readProject = () => ({ ...projectData });
+
+    const updateProject = ({
+        title = projectData.title,
+        description = projectData.description
+    }) => {
+        projectData = {
+            title,
+            description
+        }
+    }
+
+    const addItem = (newItem) => {
+        itemList.push(createItem(newItem));
+    }
+
+    return { readProject, updateProject, addItem };
 }
 
 const projectManager = (function () {
     let projectList = [];
 
-    const addProject = (title, description) => {
-        const newProject = createProject(title, description);
-        projectList.push(newProject);
+    const addProject = (newProject) => {
+        projectList.push(createProject(newProject));
     }
 
     //default starting project
-    addProject("To-Do List", "");
+    const defaultProject = {
+        title: "To-Do List",
+    }
+    addProject(defaultProject);
 
     return { projectList, addProject };
 })();
