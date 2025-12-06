@@ -62,7 +62,11 @@ function createProject ({
         itemList.push(createItem(newItem));
     }
 
-    return { readProject, updateProject, addItem };
+    const deleteItem = (deleteIndex) => {
+        itemList.splice(deleteIndex, 1);
+    }
+
+    return { readProject, updateProject, addItem, deleteItem };
 }
 
 const projectManager = (function () {
@@ -72,13 +76,22 @@ const projectManager = (function () {
         projectList.push(createProject(newProject));
     }
 
+    const deleteProject = (deleteIndex) => {
+        if (projectList.length > 1) {
+            projectList.splice(deleteIndex, 1);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     //default starting project
     const defaultProject = {
         title: "To-Do List",
     }
     addProject(defaultProject);
 
-    return { projectList, addProject };
+    return { projectList, addProject, deleteProject };
 })();
 
 export { projectManager }
