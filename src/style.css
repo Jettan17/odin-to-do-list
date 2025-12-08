@@ -1,0 +1,83 @@
+:root {
+    --background-color: #faebd7;
+    --primary-color: #13181a;
+    --secondary-color: #519872;
+    
+}
+
+body {
+    background-color: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0px;
+    font-family: fantasy;
+}
+
+#main-content {
+    flex: 0.7;
+    background-color: var(--secondary-color);
+    min-width: 70vh;
+    min-height: 80vh;
+    border-radius: 50px;
+
+    display: flex;
+}
+
+#projects {
+    flex: 0.25;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#tasks {
+    flex: 0.75;
+    margin: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+button {
+    border: 0px;
+    background-color: rgba(0,0,0,0);
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 2ch;
+}
+
+ul {
+    list-style-type: none;
+    margin: 20px 0px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+#add-task-button {
+    background-color: var(--background-color);
+    width: 70px;
+    height: 70px;
+    border-radius: 50px;
+    margin: 20px;
+    align-self:last baseline;
+    font-size: 3ch;
+}
+
+#separator {
+    width: 3px;
+    height: 600px;
+    align-self: center;
+    background-color: var(--background-color);
+    border-radius: 999px;
+}
+
+.task-container {
+    display: grid;
+}
+
+p {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}

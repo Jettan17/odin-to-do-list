@@ -1,4 +1,21 @@
 import { projectManager } from "./toDoList";
+import "./style.css";
+
+const updateProjectsDOM = () => {
+    const projectsList = document.getElementById("projects").firstElementChild;
+
+    for (const project of projectManager.projectList) {
+        const projectListItem = document.createElement("li");
+        const projectTitle = document.createElement("button");
+        projectTitle.textContent = project.readProject().title;
+        projectListItem.appendChild(projectTitle);
+        projectsList.appendChild(projectListItem);
+    }
+
+}
+
+
+
 
 document.addEventListener("DOMContentLoaded", () => {
     //Testing, remove when building and deploying
@@ -9,17 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
         dueDate: "03-11-2025", 
         priority: "Low"};
     defaultProject.addItem(newItem);
-    console.log(defaultProject.readProject()); 
-    console.log(defaultProject.readProject().itemList[0].readItem());
     defaultProject.readProject().itemList[0].updateItem({title: "changed from prev"});
-    console.log(defaultProject.readProject().itemList[0].readItem());
     const newProject = {
         title: "Video Project",
         description: "4201 Final Project",
     }
     projectManager.addProject(newProject);
-    console.log(projectManager.projectList.length);
-    console.log(projectManager.deleteProject(defaultProject));
-    console.log(projectManager.projectList.length);
-    console.log(projectManager.projectList[0].readProject());
+    
+    updateProjectsDOM();
+    updateTasksDOM(defaultProject);
 })
