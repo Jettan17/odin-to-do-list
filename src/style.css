@@ -1,8 +1,21 @@
 :root {
     --background-color: #faebd7;
     --primary-color: #13181a;
-    --secondary-color: #519872;
+    --secondary-color: #58a87d;
     
+}
+
+
+.font-en {
+  font-family: "Bitcount Prop Single", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings:
+    "slnt" 0,
+    "CRSV" 0.5,
+    "ELSH" 0,
+    "ELXP" 0;
 }
 
 body {
@@ -12,7 +25,7 @@ body {
     align-items: center;
     min-height: 100vh;
     margin: 0px;
-    font-family: fantasy;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 #main-content {
@@ -37,6 +50,7 @@ body {
     margin: 30px;
     display: flex;
     flex-direction: column;
+    gap: 30px;
 }
 
 button {
@@ -54,6 +68,7 @@ ul {
 
 li {
     margin-bottom: 10px;
+    color: var(--background-color);
 }
 
 #add-task-button {
@@ -75,7 +90,29 @@ li {
 }
 
 .task-container {
-    display: grid;
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    background-color: var(--background-color);
+    border-radius: 30px;
+    padding: 15px;
+}
+
+.task-title {
+    flex: 0.5;
+}
+
+.task-due-date {
+    flex: 0.3; 
+}
+
+.task-priority {
+    flex: 0.1;
+}
+
+.task-done-status {
+    flex: 0.1;
+    width: 10px;
 }
 
 p {
