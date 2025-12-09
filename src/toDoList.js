@@ -36,27 +36,15 @@ function createItem ({title,
 
 function createProject ({
     title,
-    description = "",
     itemList = []
 }) {
     //Store data in private variable
     let projectData = {
         title,
-        description,
         itemList
     }
 
     const readProject = () => ({ ...projectData });
-
-    const updateProject = ({
-        title = projectData.title,
-        description = projectData.description
-    }) => {
-        projectData = {
-            title,
-            description
-        }
-    }
 
     const addItem = (newItem) => {
         itemList.push(createItem(newItem));
@@ -64,9 +52,14 @@ function createProject ({
 
     const deleteItem = (deleteIndex) => {
         itemList.splice(deleteIndex, 1);
+
+        //If new length is 0, delete project
+        if (itemList.length <= 0) {
+            projectManager.deleteProject(projectData);
+        }
     }
 
-    return { readProject, updateProject, addItem, deleteItem };
+    return { readProject, addItem, deleteItem };
 }
 
 const projectManager = (function () {
@@ -76,8 +69,17 @@ const projectManager = (function () {
         projectList.push(createProject(newProject));
     }
 
-    const deleteProject = (deleteIndex) => {
+    const deleteProject = (deleteProject) => {
         if (projectList.length > 1) {
+           //Find delete index
+           let deleteIndex = 0;
+           for (let i = 0; i < projectList.length; i++) {
+                project = projectList[i];
+                if (project.title === deleteProject.title) {
+                    deleteIndex = i;
+                    break;
+                }
+           } 
             projectList.splice(deleteIndex, 1);
             return true;
         } else {
