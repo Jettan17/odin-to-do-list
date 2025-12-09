@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
         deleteButton.classList.add("font-en", "disabled");
         document.getElementById("edit-title").value = "";
         document.getElementById("edit-description").value = "";
-        document.getElementById("edit-deadline").value = format(new Date(), "yyyy-MM-dd");
+        document.getElementById("edit-deadline").value = format(new Date(), "dd-MM-yyyy");
         document.getElementById("edit-priority").textContent = "Medium";
         const currentProjectIndex = document.getElementById("tasks").firstElementChild.firstElementChild.dataset.index.split(',')[0];
         document.getElementById("edit-confirm").dataset.index = `${currentProjectIndex},${projectManager.projectList[currentProjectIndex].length}`;
