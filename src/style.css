@@ -28,14 +28,60 @@ body {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
-#main-content {
+#main-content{
     flex: 0.7;
     background-color: var(--secondary-color);
     min-width: 70vh;
     min-height: 80vh;
     border-radius: 50px;
-
     display: flex;
+}
+
+#edit-task-form {
+    background-color: var(--background-color);
+    border-radius: 30px;
+    padding: 30px;
+    border: 0px;
+    display: none;
+    gap: 20px;
+    grid-template: 1fr 2fr 1fr / 0.5fr repeat(3, 1fr);
+    min-height: 50vh;
+}
+
+#edit-task-form[open] {
+    display: grid;
+}
+
+#edit-task-form * {
+    text-align: center;
+    background-color: var(--background-color);
+    font-size: 2.2ch;
+}
+
+#edit-title, #edit-description, #edit-deadline {
+    border: 1px solid #13181a;
+}
+
+#edit-title {
+    grid-column: span 3;
+}
+
+#edit-description {
+    grid-column: span 4;
+    resize: none;
+    padding: 10px;
+}
+
+#edit-deadline {
+    grid-column: span 2;
+}
+
+#edit-confirm {
+    background-color: var(--secondary-color);
+    border-radius: 999px;
+    max-height: 70px;
+    align-self: center;
+    padding: 20px 0px;
 }
 
 #projects {

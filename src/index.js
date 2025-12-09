@@ -7,12 +7,13 @@ const updateProjectsDOM = () => {
     //Clear Projects DOM
     projectsList.innerHTML = "";
 
-    for (const project of projectManager.projectList) {
+    for (let i = 0; i < projectManager.projectList.length; i++) {
+        const project = projectManager.projectList[i];
         const projectListItem = document.createElement("li");
         const projectTitle = document.createElement("button");
         projectTitle.classList.add("font-en");
         projectTitle.textContent = project.readProject().title;
-        console.log(typeof(project));
+        projectTitle.dataset.index = i;
         projectTitle.addEventListener("click", () => {updateTasksDOM(project);});
         projectListItem.appendChild(projectTitle);
         projectsList.appendChild(projectListItem);
@@ -26,9 +27,11 @@ const updateTasksDOM = (currentProject) => {
     //Clear tasks DOM
     tasksContainer.innerHTML = "";
 
-    for (const task of currentProject.readProject().itemList) {
+    const projectIndex = projectManager.projectList.indexOf(currentProject);
+
+    for (let i = 0; i < currentProject.readProject().itemList.length; i++) {
+        const task = currentProject.readProject().itemList[i];
         const taskData = task.readItem();
-        console.log(taskData.doneStatus);
         const taskItemContainer = document.createElement("div");
         taskItemContainer.classList.add("task-container");
         taskItemContainer.classList.add("font-en");
@@ -36,6 +39,7 @@ const updateTasksDOM = (currentProject) => {
         taskTitle.classList.add("task-title");
         taskTitle.classList.add("font-en");
         taskTitle.textContent = taskData.title;
+        taskTitle.dataset.index = `${projectIndex},${i}`;
         const taskDueDate = document.createElement("p");
         taskDueDate.classList.add("task-due-date");
         taskDueDate.classList.add("font-en");
@@ -57,16 +61,27 @@ const updateTasksDOM = (currentProject) => {
         taskItemContainer.appendChild(taskDoneStatus);
         tasksContainer.appendChild(taskItemContainer);
     }
-}
 
-const editTask = (e) => {
-    const target = e.target;
-
-    //Open dialog form
+    //Editing Task
+    for (const taskTitle of document.getElementsByClassName("task-title")) {
+        taskTitle.addEventListener("click", () => {
+            const projectIndex = taskTitle.dataset.index.split(",")[0];
+            const taskIndex = taskTitle.dataset.index.split(",")[1];
+            const taskData = projectManager.projectList[projectIndex].readProject().itemList[taskIndex].readItem();
+            document.getElementById("edit-title").value = taskData.title;
+            document.getElementById("edit-description").value = taskData.description;
+            document.getElementById("edit-deadline").value = taskData.dueDate;
+            document.getElementById("edit-priority").textContent = taskData.priority;
+            const editForm = document.getElementById("edit-task-form");
+            editForm.removeAttribute("hidden");
+            editForm.showModal();
+        })
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    //Testing, remove when building and deploying
+    //Testing, modify when building and deploying
+
     const defaultProject = projectManager.projectList[0];
     let newItem = {
         title: "Test Task", 
@@ -86,5 +101,5 @@ document.addEventListener("DOMContentLoaded", () => {
     projectManager.projectList[1].addItem(newItem);
     
     updateProjectsDOM();
-    updateTasksDOM(defaultProject);
+    updateTasksDOM(defaultProject);    
 })
