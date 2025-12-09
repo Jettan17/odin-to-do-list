@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 function createItem ({title, 
     description = "", 
     dueDate, 
@@ -36,7 +38,10 @@ function createItem ({title,
 
 function createProject ({
     title,
-    itemList = []
+    itemList = [createItem({
+        title: "New Task",
+        dueDate: format(new Date(), "dd-MM-yyyy")
+    })]
 }) {
     //Store data in private variable
     let projectData = {

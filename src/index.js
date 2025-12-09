@@ -91,7 +91,6 @@ const updateTasksDOM = (currentProject) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     //Testing, modify when building and deploying
-
     const defaultProject = projectManager.projectList[0];
     let newItem = {
         title: "Test Task", 
@@ -111,10 +110,14 @@ document.addEventListener("DOMContentLoaded", () => {
     projectManager.projectList[1].addItem(newItem);
 
     updateProjectsDOM();
-    updateTasksDOM(defaultProject);  
+    updateTasksDOM(defaultProject);
 
     document.getElementById("close-task").addEventListener("click", () => {
         document.getElementById("edit-task-form").close();
+    })
+
+    document.getElementById("cancel-project").addEventListener("click", () => {
+        document.getElementById("new-project-form").close();
     })
 
     document.getElementById("edit-confirm").addEventListener("click", (e) => {
@@ -139,6 +142,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.getElementById("edit-task-form").close();
         updateTasksDOM(projectManager.projectList[projectIndex]);
+    })
+
+    document.getElementById("confirm-project").addEventListener("click", () => {
+        projectManager.addProject({title: document.getElementById("new-project-title").value});
+        document.getElementById("new-project-form").close()
+        updateProjectsDOM();
     })
     
     document.getElementById("edit-priority").addEventListener("click", (e) => {
@@ -166,6 +175,10 @@ document.addEventListener("DOMContentLoaded", () => {
         const editForm = document.getElementById("edit-task-form");
         editForm.removeAttribute("hidden");
         editForm.showModal();
+    })
+
+    document.getElementById("new-project-button").addEventListener("click", () => {
+        document.getElementById("new-project-form").showModal();
     })
 
     document.getElementById("edit-delete").addEventListener("click", () => {

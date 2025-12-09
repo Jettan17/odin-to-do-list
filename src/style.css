@@ -33,18 +33,21 @@ body {
     flex: 0.7;
     background-color: var(--secondary-color);
     min-width: 70vh;
-    min-height: 80vh;
+    max-height: 80vh;
     border-radius: 50px;
-    display: flex;
+    display: grid;
+    grid-template: 0.8fr 0.2fr / 1fr 0.1fr 3fr;
 }
 
-#edit-task-form {
+#edit-task-form, #new-project-form {
     background-color: var(--background-color);
     border-radius: 30px;
     padding: 30px;
     border: 0px;
-    display: none;
     gap: 20px;
+}
+
+#edit-task-form {
     grid-template: 1fr 2fr 1fr / 0.5fr repeat(4, 1fr);
     min-height: 50vh;
 }
@@ -134,20 +137,26 @@ li {
     color: var(--background-color);
 }
 
-#add-task-button {
+#add-task-button, #new-project-button {
     background-color: var(--background-color);
     width: 70px;
     height: 70px;
     border-radius: 50px;
     margin: 20px;
-    align-self:last baseline;
     font-size: 3ch;
+}
+
+#add-task-button {
+    align-self:last baseline;
+    grid-column-start: 3;
+    justify-self: end;
 }
 
 #separator {
     width: 3px;
-    height: 600px;
+    height: 500px;
     align-self: center;
+    transform: translate(0, 10%);
     background-color: var(--background-color);
     border-radius: 999px;
 }
@@ -180,4 +189,9 @@ li {
 
 p {
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+#new-project-form {
+    text-align: center;
+    padding: 10px 30px 20px 30px;
 }
