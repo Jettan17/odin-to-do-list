@@ -2,7 +2,8 @@
     --background-color: #faebd7;
     --primary-color: #13181a;
     --secondary-color: #58a87d;
-    
+    --disabled-color: #8f8f8f;
+    --red: #d75454;
 }
 
 
@@ -44,7 +45,7 @@ body {
     border: 0px;
     display: none;
     gap: 20px;
-    grid-template: 1fr 2fr 1fr / 0.5fr repeat(3, 1fr);
+    grid-template: 1fr 2fr 1fr / 0.5fr repeat(4, 1fr);
     min-height: 50vh;
 }
 
@@ -63,11 +64,11 @@ body {
 }
 
 #edit-title {
-    grid-column: span 3;
+    grid-column: span 4;
 }
 
 #edit-description {
-    grid-column: span 4;
+    grid-column: span 5;
     resize: none;
     padding: 10px;
 }
@@ -76,15 +77,27 @@ body {
     grid-column: span 2;
 }
 
-#delete-task, #edit-confirm {
-    background-color: var(--secondary-color);
+#edit-delete, #close-task, #edit-confirm {
     border-radius: 999px;
     min-height: 70px;
     align-self: center;
     padding: 20px;
 }
 
-#delete-task {
+#close-task, #edit-confirm {
+    background-color: var(--secondary-color);
+}
+
+#edit-delete {
+    background-color: var(--red);
+}
+
+#edit-delete.disabled {
+    background-color: var(--disabled-color);
+    cursor:auto;
+}
+
+#close-task {
     max-width: 70px;
 }
 

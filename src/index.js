@@ -70,6 +70,9 @@ const updateTasksDOM = (currentProject) => {
     //Editing Task
     for (const taskTitle of document.getElementsByClassName("task-title")) {
         taskTitle.addEventListener("click", () => {
+            const deleteButton = document.getElementById("edit-delete");
+            deleteButton.className = "";
+            deleteButton.classList.add("edit-delete");
             const projectIndex = taskTitle.dataset.index.split(",")[0];
             const taskIndex = taskTitle.dataset.index.split(",")[1];
             const taskData = projectManager.projectList[projectIndex].readProject().itemList[taskIndex].readItem();
@@ -106,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dueDate: "01-03-2026"};
     projectManager.projectList[1].addItem(newItem);
 
-    document.getElementById("delete-task").addEventListener("click", () => {
+    document.getElementById("close-task").addEventListener("click", () => {
         document.getElementById("edit-task-form").close();
     })
 
@@ -136,6 +139,10 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (currentVal === "High") {
             e.target.textContent = "Low";
         }
+    })
+
+    document.getElementById("add-task-button").addEventListener("click", () => {
+
     })
     
     updateProjectsDOM();
