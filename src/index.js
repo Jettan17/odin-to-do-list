@@ -72,6 +72,7 @@ const updateTasksDOM = (currentProject) => {
             document.getElementById("edit-description").value = taskData.description;
             document.getElementById("edit-deadline").value = taskData.dueDate;
             document.getElementById("edit-priority").textContent = taskData.priority;
+            document.getElementById("edit-confirm").dataset.index = taskTitle.dataset.index;
             const editForm = document.getElementById("edit-task-form");
             editForm.removeAttribute("hidden");
             editForm.showModal();
@@ -99,6 +100,37 @@ document.addEventListener("DOMContentLoaded", () => {
         description: "28:00 and 45:14", 
         dueDate: "01-03-2026"};
     projectManager.projectList[1].addItem(newItem);
+
+    document.getElementById("delete-task").addEventListener("click", () => {
+        document.getElementById("edit-task-form").close();
+    })
+
+    document.getElementById("edit-confirm").addEventListener("click", (e) => {
+        const projectIndex = e.target.dataset.index.split(",")[0];
+        const taskIndex = e.target.dataset.index.split(",")[1];
+        
+        const updatedItem = {
+            title: document.getElementById("edit-title").value,
+            description: document.getElementById("edit-description").value,
+            dueDate: document.getElementById("edit-deadline").value,
+            priority: document.getElementById("edit-priority").textContent
+        }
+        projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem(updatedItem);
+        document.getElementById("edit-task-form").close();
+        updateTasksDOM(projectManager.projectList[projectIndex]);
+    })
+    
+    document.getElementById("edit-priority").addEventListener("click", (e) => {
+        const currentVal = e.target.textContent;
+        
+        if (currentVal === "Low") {
+            e.target.textContent = "Medium";
+        } else if (currentVal === "Medium") {
+            e.target.textContent = "High";
+        } else if (currentVal === "High") {
+            e.target.textContent = "Low";
+        }
+    })
     
     updateProjectsDOM();
     updateTasksDOM(defaultProject);    
