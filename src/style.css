@@ -76,12 +76,16 @@ body {
     grid-column: span 2;
 }
 
-#edit-confirm {
+#delete-task, #edit-confirm {
     background-color: var(--secondary-color);
     border-radius: 999px;
-    max-height: 70px;
+    min-height: 70px;
     align-self: center;
-    padding: 20px 0px;
+    padding: 20px;
+}
+
+#delete-task {
+    max-width: 70px;
 }
 
 #projects {
