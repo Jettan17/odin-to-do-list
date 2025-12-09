@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const taskIndex = e.target.dataset.index.split(",")[1];
 
         //check whether edit or add
-        if (document.getElementById("edit-delete").classList.contains("disable")) {
+        if (document.getElementById("edit-delete").classList.contains("disabled")) {
             //Add
             projectManager.projectList[projectIndex].addItem(updatedItem);
         } else {
