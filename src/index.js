@@ -167,4 +167,18 @@ document.addEventListener("DOMContentLoaded", () => {
         editForm.removeAttribute("hidden");
         editForm.showModal();
     })
+
+    document.getElementById("edit-delete").addEventListener("click", () => {
+        if (document.getElementById("edit-delete").classList.contains("disabled")) {
+            return;
+        }
+        const projectIndex = document.getElementById("edit-confirm").dataset.index.split(",")[0];
+        const taskIndex = document.getElementById("edit-confirm").dataset.index.split(",")[1];
+
+        projectManager.projectList[projectIndex].deleteItem(taskIndex);
+
+        document.getElementById("edit-task-form").close();
+        updateProjectsDOM();
+        updateTasksDOM(projectManager.projectList[0]);
+    })
 })
