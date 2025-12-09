@@ -1,5 +1,6 @@
 import { projectManager } from "./toDoList";
 import "./style.css";
+import { format } from "date-fns";
 
 const updateProjectsDOM = () => {
     const projectsList = document.getElementById("projects").firstElementChild;
@@ -72,7 +73,7 @@ const updateTasksDOM = (currentProject) => {
         taskTitle.addEventListener("click", () => {
             const deleteButton = document.getElementById("edit-delete");
             deleteButton.className = "";
-            deleteButton.classList.add("edit-delete");
+            deleteButton.classList.add("font-en");
             const projectIndex = taskTitle.dataset.index.split(",")[0];
             const taskIndex = taskTitle.dataset.index.split(",")[1];
             const taskData = projectManager.projectList[projectIndex].readProject().itemList[taskIndex].readItem();
@@ -109,6 +110,9 @@ document.addEventListener("DOMContentLoaded", () => {
         dueDate: "01-03-2026"};
     projectManager.projectList[1].addItem(newItem);
 
+    updateProjectsDOM();
+    updateTasksDOM(defaultProject);  
+
     document.getElementById("close-task").addEventListener("click", () => {
         document.getElementById("edit-task-form").close();
     })
@@ -124,7 +128,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const projectIndex = e.target.dataset.index.split(",")[0];
         const taskIndex = e.target.dataset.index.split(",")[1];
 
-        projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem(updatedItem);
+        //check whether edit or add
+        if (document.getElementById("edit-delete").classList.contains("disable")) {
+            //Add
+            projectManager.projectList[projectIndex].addItem(updatedItem);
+        } else {
+            //Edit
+            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem(updatedItem);
+        }
+
         document.getElementById("edit-task-form").close();
         updateTasksDOM(projectManager.projectList[projectIndex]);
     })
@@ -142,9 +154,17 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     document.getElementById("add-task-button").addEventListener("click", () => {
-
+        const deleteButton = document.getElementById("edit-delete");
+        deleteButton.className = "";
+        deleteButton.classList.add("font-en", "disabled");
+        document.getElementById("edit-title").value = "";
+        document.getElementById("edit-description").value = "";
+        document.getElementById("edit-deadline").value = format(new Date(), "yyyy-MM-dd");
+        document.getElementById("edit-priority").textContent = "Medium";
+        const currentProjectIndex = document.getElementById("tasks").firstElementChild.firstElementChild.dataset.index.split(',')[0];
+        document.getElementById("edit-confirm").dataset.index = `${currentProjectIndex},${projectManager.projectList[currentProjectIndex].length}`;
+        const editForm = document.getElementById("edit-task-form");
+        editForm.removeAttribute("hidden");
+        editForm.showModal();
     })
-    
-    updateProjectsDOM();
-    updateTasksDOM(defaultProject);    
 })
