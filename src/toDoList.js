@@ -50,12 +50,15 @@ function createProject ({
         itemList.push(createItem(newItem));
     }
 
-    const deleteItem = (deleteIndex) => {
-        itemList.splice(deleteIndex, 1);
+    const deleteItem = (projectIndex, deleteIndex) => {
+        const projectList = projectManager.projectList;
+        if (projectList.length > 1 || itemList.length > 1) {
+           itemList.splice(deleteIndex, 1);
 
-        //If new length is 0, delete project
-        if (itemList.length <= 0) {
-            projectManager.deleteProject(projectData);
+            //If new length is 0, delete project
+            if (itemList.length <= 0) {
+                projectManager.deleteProject(projectIndex);
+            }
         }
     }
 
@@ -69,22 +72,8 @@ const projectManager = (function () {
         projectList.push(createProject(newProject));
     }
 
-    const deleteProject = (deleteProject) => {
-        if (projectList.length > 1) {
-           //Find delete index
-           let deleteIndex = 0;
-           for (let i = 0; i < projectList.length; i++) {
-                project = projectList[i];
-                if (project.title === deleteProject.title) {
-                    deleteIndex = i;
-                    break;
-                }
-           } 
-            projectList.splice(deleteIndex, 1);
-            return true;
-        } else {
-            return false;
-        }
+    const deleteProject = (deleteIndex) => {
+        projectList.splice(deleteIndex, 1);
     }
 
     //default starting project

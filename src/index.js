@@ -175,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const projectIndex = document.getElementById("edit-confirm").dataset.index.split(",")[0];
         const taskIndex = document.getElementById("edit-confirm").dataset.index.split(",")[1];
 
-        projectManager.projectList[projectIndex].deleteItem(taskIndex);
+        projectManager.projectList[projectIndex].deleteItem(projectIndex, taskIndex);
 
         document.getElementById("edit-task-form").close();
         updateProjectsDOM();
