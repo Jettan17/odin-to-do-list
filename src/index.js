@@ -54,9 +54,36 @@ const updateTasksDOM = (currentProject) => {
         taskDueDate.classList.add("font-en");
         taskDueDate.textContent = taskData.dueDate;
         const taskPriority = document.createElement("button");
-        taskPriority.classList.add("task-priority");
-        taskPriority.classList.add("font-en");
+        taskPriority.classList.add("task-priority", "font-en");
+        const priorityText = (taskData.priority || "").toString().toLowerCase();
+        if (priorityText.includes("high")) {
+            taskPriority.classList.add("priority-high");
+        } else if (priorityText.includes("medium")) {
+            taskPriority.classList.add("priority-medium");
+        } else {
+            taskPriority.classList.add("priority-low");
+        }
         taskPriority.textContent = taskData.priority;
+        taskPriority.addEventListener("click", () => { //Priority Fast Toggle
+            taskPriority.classList = "";
+            taskPriority.classList.add("task-priority", "font-en");
+            
+
+            const currentVal = taskPriority.textContent;
+            if (currentVal === "Low") {
+                taskPriority.textContent = "Medium";
+                taskPriority.classList.add("priority-medium");
+            } else if (currentVal === "Medium") {
+                taskPriority.textContent = "High";
+                taskPriority.classList.add("priority-high");
+            } else if (currentVal === "High") {
+                taskPriority.textContent = "Low";
+                taskPriority.classList.add("priority-low");
+            }
+
+            const taskIndex = i;
+            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem({priority: taskPriority.textContent});
+        })
         const taskDoneStatus = document.createElement("input");
         taskDoneStatus.classList.add("task-done-status");
         taskDoneStatus.classList.add("font-en");
@@ -65,8 +92,7 @@ const updateTasksDOM = (currentProject) => {
         taskDoneStatus.checked = taskData.doneStatus;
         taskDoneStatus.addEventListener("click", () => {
             const taskIndex = i;
-
-            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem({doneStatus: taskDoneStatus.value});;
+            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem({doneStatus: taskDoneStatus.value});
         })
 
         taskItemContainer.appendChild(taskTitle);
@@ -94,6 +120,11 @@ const updateTasksDOM = (currentProject) => {
             editForm.removeAttribute("hidden");
             editForm.showModal();
         })
+    }
+
+    //Priority Fast Toggle
+    for (const priorityButton of document.getElementsByClassName("task-priority")) {
+        
     }
 }
 

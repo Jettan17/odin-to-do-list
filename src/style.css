@@ -162,29 +162,66 @@ li {
 }
 
 .task-container {
-    display: flex;
-    flex-direction: row;
-    text-align: center;
+    display: grid;
+    /* Use clamp() so the columns are responsive but fixed enough to align
+       - title column grows but won't be smaller than 180px
+       - date column uses clamp to stay within a reasonable min/max
+       - priority column uses clamp for label width
+       - checkbox column is fixed */
+    grid-template-columns: minmax(180px, 1fr) clamp(120px, 12ch, 180px) clamp(80px, 8ch, 120px) 64px;
+    gap: 12px;
+    align-items: center; /* vertically center contents */
+    text-align: left;
     background-color: var(--background-color);
     border-radius: 30px;
     padding: 15px;
 }
 
 .task-title {
-    flex: 0.5;
+    grid-column: 1;
+    margin-left: 8px;
+    /* Prevent long titles from changing column widths */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .task-due-date {
-    flex: 0.3; 
+    grid-column: 2;
 }
 
 .task-priority {
-    flex: 0.1;
+    grid-column: 3;
+    justify-self: start;
 }
 
 .task-done-status {
-    flex: 0.1;
-    width: 10px;
+    grid-column: 4;
+    justify-self: center;
+    width: 20px;
+    height: 20px;
+}
+
+/* Priority color variants */
+.priority-high {
+    background-color: var(--red);
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+
+.priority-medium {
+    background-color: #ffd24d;
+    color: var(--primary-color);
+    border-radius: 8px;
+    padding: 6px 10px;
+}
+
+.priority-low {
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 8px;
+    padding: 6px 10px;
 }
 
 p {
