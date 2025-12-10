@@ -39,8 +39,7 @@ const updateTasksDOM = (currentProject) => {
     const projectIndex = projectManager.projectList.indexOf(currentProject);
 
     for (let i = 0; i < currentProject.readProject().itemList.length; i++) {
-        const task = currentProject.readProject().itemList[i];
-        const taskData = task.readItem();
+        const taskData = currentProject.readProject().itemList[i];
         const taskItemContainer = document.createElement("div");
         taskItemContainer.classList.add("task-container");
         taskItemContainer.classList.add("font-en");
@@ -81,7 +80,8 @@ const updateTasksDOM = (currentProject) => {
             }
 
             const taskIndex = i;
-            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem({priority: taskPriority.textContent});
+            projectManager.projectList[projectIndex].updateItem(taskIndex, {priority: taskPriority.textContent});
+            projectManager.save();
         })
         const taskDoneStatus = document.createElement("input");
         taskDoneStatus.classList.add("task-done-status");
@@ -91,7 +91,9 @@ const updateTasksDOM = (currentProject) => {
         taskDoneStatus.checked = taskData.doneStatus;
         taskDoneStatus.addEventListener("click", () => {
             const taskIndex = i;
-            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem({doneStatus: taskDoneStatus.value});
+            // use checked boolean for checkbox
+            projectManager.projectList[projectIndex].updateItem(taskIndex, {doneStatus: taskDoneStatus.checked});
+            projectManager.save();
         })
 
         taskItemContainer.appendChild(taskTitle);
@@ -109,7 +111,7 @@ const updateTasksDOM = (currentProject) => {
             deleteButton.classList.add("font-en");
             const projectIndex = taskTitle.dataset.index.split(",")[0];
             const taskIndex = taskTitle.dataset.index.split(",")[1];
-            const taskData = projectManager.projectList[projectIndex].readProject().itemList[taskIndex].readItem();
+            const taskData = projectManager.projectList[projectIndex].readProject().itemList[taskIndex];
             document.getElementById("edit-title").value = taskData.title;
             document.getElementById("edit-description").value = taskData.description;
             document.getElementById("edit-deadline").value = taskData.dueDate;
@@ -135,41 +137,43 @@ const updateTasksDOM = (currentProject) => {
 
 document.addEventListener("DOMContentLoaded", () => {
     //Populate with Dummy Data
-    const defaultProject = projectManager.projectList[0];
-    let newItem = {
-        title: "Feed the CAT", 
-        description: "meowmeow", 
-        dueDate: "03-11-2025", 
-        priority: "High"
-    };
-    defaultProject.readProject().itemList[0].updateItem(newItem);
-    newItem = {
-        title: "Do Laundry", 
-        priority: "Low"
-    };
-    defaultProject.addItem(newItem);
-    newItem = {
-        title: "DIS Work",
-        description: "Do following modules:\n1. SQL\n2. Machine Learning\n3. AWS",
-        dueDate: "02-01-2026"
+    if (!localStorage.getItem("projectList")) {
+        const defaultProject = projectManager.projectList[0];
+        let newItem = {
+            title: "Feed the CAT",
+            description: "meowmeow",
+            dueDate: "03-11-2025",
+            priority: "High"
+        };
+        defaultProject.updateItem(0, newItem);
+        newItem = {
+            title: "Do Laundry",
+            priority: "Low"
+        };
+        defaultProject.addItem(newItem);
+        newItem = {
+            title: "DIS Work",
+            description: "Do following modules:\n1. SQL\n2. Machine Learning\n3. AWS",
+            dueDate: "02-01-2026"
+        }
+        defaultProject.addItem(newItem);
+
+        const newProject = {
+            title: "Video Project"
+        }
+        projectManager.addProject(newProject);
+        newItem = {
+            title: "VFX",
+            description: "28:00 and 45:14",
+            dueDate: "01-03-2026"
+        };
+        projectManager.projectList[1].updateItem(0, newItem);
+
+        projectManager.save();
     }
-    defaultProject.addItem(newItem);
 
-    const newProject = {
-        title: "Video Project"
-    }
-    projectManager.addProject(newProject);
-    newItem = {
-        title: "VFX", 
-        description: "28:00 and 45:14", 
-        dueDate: "01-03-2026"
-    };
-    projectManager.projectList[1].readProject().itemList[0].updateItem(newItem);
-
-    //End of Dummy Data
-
-    updateProjectsDOM(defaultProject);
-    updateTasksDOM(defaultProject);
+    updateProjectsDOM(projectManager.projectList[0]);
+    updateTasksDOM(projectManager.projectList[0]);
 
     document.getElementById("close-task").addEventListener("click", () => {
         document.getElementById("edit-task-form").close();
@@ -196,8 +200,11 @@ document.addEventListener("DOMContentLoaded", () => {
             projectManager.projectList[projectIndex].addItem(updatedItem);
         } else {
             //Edit
-            projectManager.projectList[projectIndex].readProject().itemList[taskIndex].updateItem(updatedItem);
+            projectManager.projectList[projectIndex].updateItem(taskIndex, updatedItem);
         }
+
+        // persist changes
+        projectManager.save();
 
         document.getElementById("edit-task-form").close();
         updateTasksDOM(projectManager.projectList[projectIndex]);
@@ -206,6 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("confirm-project").addEventListener("click", () => {
         projectManager.addProject({title: document.getElementById("new-project-title").value});
         document.getElementById("new-project-form").close();
+        projectManager.save();
         updateProjectsDOM(projectManager.projectList.at(-1));
         updateTasksDOM(projectManager.projectList.at(-1));
     })
@@ -263,6 +271,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const taskIndex = document.getElementById("edit-confirm").dataset.index.split(",")[1];
 
         projectManager.projectList[projectIndex].deleteItem(projectIndex, taskIndex);
+
+        projectManager.save();
 
         document.getElementById("edit-task-form").close();
         updateProjectsDOM(projectManager.projectList[0]);

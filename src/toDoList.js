@@ -42,13 +42,18 @@ function createProject ({
         title: "New Task",
     })]
 }) {
-    //Store data in private variable
+    // normalize itemList into factory instances and store data in private variable
+    itemList = (itemList || []).map(it => (typeof it.readItem === 'function' ? it : createItem(it)));
     let projectData = {
         title,
         itemList
     }
 
-    const readProject = () => ({ ...projectData });
+    const readProject = () => ({
+        title: projectData.title,
+        // expose plain item objects (not factory instances)
+        itemList: itemList.map(item => (typeof item.readItem === 'function' ? item.readItem() : item))
+    });
 
     const addItem = (newItem) => {
         itemList.push(createItem(newItem));
@@ -66,7 +71,13 @@ function createProject ({
         }
     }
 
-    return { readProject, addItem, deleteItem };
+    const updateItem = (index, newData) => {
+        if (index >= 0 && index < itemList.length) {
+            itemList[index].updateItem(newData);
+        }
+    }
+
+    return { readProject, addItem, deleteItem, updateItem };
 }
 
 const projectManager = (function () {
@@ -80,13 +91,39 @@ const projectManager = (function () {
         projectList.splice(deleteIndex, 1);
     }
 
-    //default starting project
-    const defaultProject = {
-        title: "To-Do List",
+    const save = () => {
+        // serialize to plain objects and store
+        const plain = projectList.map(p => p.readProject());
+        localStorage.setItem("projectList", JSON.stringify(plain));
     }
-    addProject(defaultProject);
 
-    return { projectList, addProject, deleteProject };
+    const load = () => {
+        const raw = localStorage.getItem("projectList");
+        if (!raw) return false;
+        try {
+            const parsed = JSON.parse(raw);
+            // mutate existing array so external references remain valid
+            projectList.length = 0;
+            for (const proj of parsed) {
+                // proj is plain { title, itemList: [ {..}, ... ] }
+                // convert to factory instance by calling createProject
+                // ensure itemList is normalized inside createProject
+                projectList.push(createProject({ title: proj.title, itemList: proj.itemList || [] }));
+            }
+            return true;
+        } catch (e) {
+            console.error('Failed to parse projectList from localStorage', e);
+            return false;
+        }
+    }
+
+    // initialize: try load, otherwise create default and save
+    if (!load()) {
+        const defaultProject = { title: "To-Do List" };
+        addProject(defaultProject);
+    }
+
+    return { projectList, addProject, deleteProject, save, load };
 })();
 
 export { projectManager }
