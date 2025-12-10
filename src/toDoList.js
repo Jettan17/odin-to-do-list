@@ -2,7 +2,7 @@ import { format } from "date-fns";
 
 function createItem ({title, 
     description = "", 
-    dueDate, 
+    dueDate = format(new Date(), "dd-MM-yyyy"), 
     priority = "Medium",
     doneStatus = false
 }) {
@@ -40,7 +40,6 @@ function createProject ({
     title,
     itemList = [createItem({
         title: "New Task",
-        dueDate: format(new Date(), "dd-MM-yyyy")
     })]
 }) {
     //Store data in private variable

@@ -67,7 +67,6 @@ const updateTasksDOM = (currentProject) => {
         taskPriority.addEventListener("click", () => { //Priority Fast Toggle
             taskPriority.classList = "";
             taskPriority.classList.add("task-priority", "font-en");
-            
 
             const currentVal = taskPriority.textContent;
             if (currentVal === "Low") {
@@ -114,7 +113,18 @@ const updateTasksDOM = (currentProject) => {
             document.getElementById("edit-title").value = taskData.title;
             document.getElementById("edit-description").value = taskData.description;
             document.getElementById("edit-deadline").value = taskData.dueDate;
-            document.getElementById("edit-priority").textContent = taskData.priority;
+            const taskPriority = document.getElementById("edit-priority");
+            taskPriority.textContent = taskData.priority;
+            taskPriority.classList = "";
+            taskPriority.classList.add("font-en");
+
+            if (taskPriority.textContent === "High") {
+                taskPriority.classList.add("edit-priority-high");
+            } else if (taskPriority.textContent === "Medium") {
+                taskPriority.classList.add("edit-priority-medium");
+            } else {
+                taskPriority.classList.add("edit-priority-low");
+            }
             document.getElementById("edit-confirm").dataset.index = taskTitle.dataset.index;
             const editForm = document.getElementById("edit-task-form");
             editForm.removeAttribute("hidden");
@@ -142,6 +152,8 @@ document.addEventListener("DOMContentLoaded", () => {
         description: "28:00 and 45:14", 
         dueDate: "01-03-2026"};
     projectManager.projectList[1].addItem(newItem);
+
+    //End of Dummy Data
 
     updateProjectsDOM(defaultProject);
     updateTasksDOM(defaultProject);
@@ -194,6 +206,17 @@ document.addEventListener("DOMContentLoaded", () => {
         } else if (currentVal === "High") {
             e.target.textContent = "Low";
         }
+
+        e.target.classList = "";
+        e.target.classList.add("font-en");
+
+        if (e.target.textContent === "High") {
+            e.target.classList.add("edit-priority-high");
+        } else if (e.target.textContent === "Medium") {
+            e.target.classList.add("edit-priority-medium");
+        } else {
+            e.target.classList.add("edit-priority-low");
+        }
     })
 
     document.getElementById("add-task-button").addEventListener("click", () => {
@@ -204,6 +227,8 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("edit-description").value = "";
         document.getElementById("edit-deadline").value = format(new Date(), "dd-MM-yyyy");
         document.getElementById("edit-priority").textContent = "Medium";
+        e.target.classList = "";
+        e.target.classList.add("font-en", "edit-priority-medium");
         const currentProjectIndex = document.getElementById("tasks").firstElementChild.firstElementChild.dataset.index.split(',')[0];
         document.getElementById("edit-confirm").dataset.index = `${currentProjectIndex},${projectManager.projectList[currentProjectIndex].length}`;
         const editForm = document.getElementById("edit-task-form");
