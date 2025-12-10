@@ -2,20 +2,28 @@ import { projectManager } from "./toDoList";
 import "./style.css";
 import { format } from "date-fns";
 
-const updateProjectsDOM = () => {
+const updateProjectsDOM = (currentProject) => {
     const projectsList = document.getElementById("projects").firstElementChild;
 
     //Clear Projects DOM
     projectsList.innerHTML = "";
+
+    const projectIndex = projectManager.projectList.indexOf(currentProject);
 
     for (let i = 0; i < projectManager.projectList.length; i++) {
         const project = projectManager.projectList[i];
         const projectListItem = document.createElement("li");
         const projectTitle = document.createElement("button");
         projectTitle.classList.add("font-en");
+        if (projectIndex === i) {
+            projectTitle.classList.add("current-project");
+        }
         projectTitle.textContent = project.readProject().title;
         projectTitle.dataset.index = i;
-        projectTitle.addEventListener("click", () => {updateTasksDOM(project);});
+        projectTitle.addEventListener("click", () => {
+            updateProjectsDOM(project)
+            updateTasksDOM(project);
+        });
         projectListItem.appendChild(projectTitle);
         projectsList.appendChild(projectListItem);
     }
@@ -109,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
         dueDate: "01-03-2026"};
     projectManager.projectList[1].addItem(newItem);
 
-    updateProjectsDOM();
+    updateProjectsDOM(defaultProject);
     updateTasksDOM(defaultProject);
 
     document.getElementById("close-task").addEventListener("click", () => {
@@ -146,8 +154,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("confirm-project").addEventListener("click", () => {
         projectManager.addProject({title: document.getElementById("new-project-title").value});
-        document.getElementById("new-project-form").close()
-        updateProjectsDOM();
+        document.getElementById("new-project-form").close();
+        updateProjectsDOM(projectManager.projectList.at(-1));
     })
     
     document.getElementById("edit-priority").addEventListener("click", (e) => {
@@ -191,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         projectManager.projectList[projectIndex].deleteItem(projectIndex, taskIndex);
 
         document.getElementById("edit-task-form").close();
-        updateProjectsDOM();
+        updateProjectsDOM(projectManager.projectList[0]);
         updateTasksDOM(projectManager.projectList[0]);
     })
 })

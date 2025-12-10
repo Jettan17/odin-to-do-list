@@ -195,3 +195,7 @@ p {
     text-align: center;
     padding: 10px 30px 20px 30px;
 }
+
+.current-project {
+    color: var(--background-color);
+}
