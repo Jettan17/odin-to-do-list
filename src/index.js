@@ -134,15 +134,27 @@ const updateTasksDOM = (currentProject) => {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    //Testing, modify when building and deploying
+    //Populate with Dummy Data
     const defaultProject = projectManager.projectList[0];
     let newItem = {
-        title: "Test Task", 
+        title: "Feed the CAT", 
         description: "meowmeow", 
         dueDate: "03-11-2025", 
-        priority: "Low"};
+        priority: "High"
+    };
+    defaultProject.readProject().itemList[0].updateItem(newItem);
+    newItem = {
+        title: "Do Laundry", 
+        priority: "Low"
+    };
     defaultProject.addItem(newItem);
-    defaultProject.readProject().itemList[0].updateItem({title: "changed from prev"});
+    newItem = {
+        title: "DIS Work",
+        description: "Do following modules:\n1. SQL\n2. Machine Learning\n3. AWS",
+        dueDate: "02-01-2026"
+    }
+    defaultProject.addItem(newItem);
+
     const newProject = {
         title: "Video Project"
     }
@@ -150,8 +162,9 @@ document.addEventListener("DOMContentLoaded", () => {
     newItem = {
         title: "VFX", 
         description: "28:00 and 45:14", 
-        dueDate: "01-03-2026"};
-    projectManager.projectList[1].addItem(newItem);
+        dueDate: "01-03-2026"
+    };
+    projectManager.projectList[1].readProject().itemList[0].updateItem(newItem);
 
     //End of Dummy Data
 
