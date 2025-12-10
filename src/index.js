@@ -207,6 +207,7 @@ document.addEventListener("DOMContentLoaded", () => {
         projectManager.addProject({title: document.getElementById("new-project-title").value});
         document.getElementById("new-project-form").close();
         updateProjectsDOM(projectManager.projectList.at(-1));
+        updateTasksDOM(projectManager.projectList.at(-1));
     })
     
     document.getElementById("edit-priority").addEventListener("click", (e) => {
