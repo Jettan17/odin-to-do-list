@@ -121,11 +121,6 @@ const updateTasksDOM = (currentProject) => {
             editForm.showModal();
         })
     }
-
-    //Priority Fast Toggle
-    for (const priorityButton of document.getElementsByClassName("task-priority")) {
-        
-    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
